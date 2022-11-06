@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import {useLocation} from 'react-router-dom'
 import Navbar from '../../components/navbar/Navbar';
 import Header from '../../components/header/Header';
+import SearchItem from '../../components/searchItem/SearchItem';
 import {format} from 'date-fns';
 import { DateRange } from 'react-date-range';
 import './List.css';
-import SearchItem from '../../searchItem/SearchItem';
 
 const List = () => {
 
