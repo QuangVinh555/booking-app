@@ -1,0 +1,111 @@
+.searchItem{
+    border: 1px solid lightgray;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 10px;
+}
+
+.siImg{
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+}
+
+.siDesc{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    flex: 2;
+}
+
+.siTitle{
+    font-size: 22px;
+    color: #0071c2;
+}
+
+.siDistance{
+    font-size: 14px;
+}
+
+.siTaxiOp{
+    font-size: 14px;
+    background-color: #008009;
+    color: #fff;
+    width: max-content;
+    padding: 3px;
+    border-radius: 5px;
+}
+
+.siSubtitle{
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.siFeatures{
+    font-size: 14px;
+}
+
+.siCancelOp{
+    font-size: 14px;
+    color: #008009;
+    font-weight: bold;
+}
+
+.siCancelOpSubtitle{
+    font-size: 14px;
+    color: #008009;
+}
+
+.siDetails{
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    text-align: right;
+    padding: 10px;
+}
+
+.siRaiting{
+    display: flex;
+    justify-content: space-between;
+}
+
+.siRaiting > span{
+    font-weight: bold;
+}
+
+.siRaiting > button{
+    padding: 5px;
+    border: none;
+    background-color: #003580;
+    color: #fff;
+    font-weight: bold;
+}
+
+.siDetailTexts{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.siPrice{
+    font-size: 26px;
+}
+
+.siTaxOp{
+    font-size: 14px;
+    color: gray;
+}
+
+.siCheckButton{
+    border: none;
+    color: #fff;
+    background-color: #0071c2;
+    font-weight: bold;
+    padding: 10px 5px;
+    cursor: pointer;
+    border-radius: 5px;
+}
