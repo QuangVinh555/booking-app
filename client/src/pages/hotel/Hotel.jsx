@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import Navbar from '../../components/navbar/Navbar';
 import Header from '../../components/header/Header';
 import MailList from '../../components/mailList/MailList';
@@ -6,9 +6,12 @@ import Footer from '../../components/footer/Footer';
 import './Hotel.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleArrowLeft, faCircleArrowRight, faCircleXmark, faLocationDot } from '@fortawesome/free-solid-svg-icons';
+import { useLocation, useParams } from 'react-router-dom';
+import useFetch from '../../components/hooks/useFetch/useFetch';
+import { SearchContext } from '../../context/SearchContext';
 
 const Hotel = () => {
-
+  const PK = process.env.REACT_APP_PUBLIC_API;
   const photos = [
     {
       src: "https://cf.bstatic.com/xdata/images/hotel/max1280x900/261707778.jpg?k=56ba0babbcbbfeb3d3e911728831dcbc390ed2cb16c51d88159f82bf751d04c6&o=&hp=1",
@@ -41,6 +44,22 @@ const Hotel = () => {
     setOpen(true);
   }
 
+  const location = useLocation();
+  const id = location.pathname.split('/')[2];
+
+  const {data, loading} = useFetch(`${PK}/hotels/${id}`);
+  
+  const {dates} = useContext(SearchContext);
+  
+  const MILLISECONDS = 1000*60*60*24;
+  const dayDifference = (date1, date2) => {
+    const timeDiff = Math.abs(date2?.getTime() - date1?.getTime());
+    const diffDays = Math.ceil(timeDiff / MILLISECONDS);
+    return diffDays;
+  }
+  
+  const days = dayDifference(dates[0]?.endDate, dates[0]?.startDate);
+  
   return (
     <div>
       <Navbar />
@@ -60,16 +79,16 @@ const Hotel = () => {
         <div className="hotelWrapper">
           <div className="hotelHeader">
             <div className="hotelTitles">
-              <h1 className="hotelName">Tower Street Apartments</h1>
+              <h1 className="hotelName">{data.name}</h1>
               <div className="hotelAddress">
                 <FontAwesomeIcon icon={faLocationDot} />
                 <span>Elton St 125 New york</span>
               </div>
               <span className="hotelDistance">
-                Excellent location – 500m from center
+                Excellent location – {data.distance}m from center
               </span>
               <span className="hotelPriceHightLight">
-                Book a stay over $114 at this property and get a free airport taxi
+                Book a stay over ${data.cheapestPrice} at this property and get a free airport taxi
               </span>
             </div>
             <button className="hotelTitlesButton">Reserve or Book now!</button>
@@ -85,17 +104,9 @@ const Hotel = () => {
           </div>
           <div className="hotelDetails">
             <div className="hotelDetailsTexts">
-              <h1 className="hotelTitle">Stay in the heart of City</h1>
+              <h1 className="hotelTitle">{data.title}</h1>
               <p className="hotelDesc">
-                Located a 5-minute walk from St. Florian's Gate in Krakow, 
-                Tower Street Apartments has accommodations with air conditioning and free WiFi. 
-                The units come with hardwood floors and feature a fully equipped kitchenette 
-                with a microwave, a flat-screen TV, and a private bathroom with shower and a 
-                hairdryer. A fridge is also offered, as well as an electric tea pot and a coffee 
-                machine. Popular points of interest near the apartment include Cloth Hall, 
-                Main Market Square and Town Hall Tower. The nearest airport is John Paul II 
-                International Kraków–Balice, 16.1 km from Tower Street Apartments, and 
-                the property offers a paid airport shuttle service.
+                {data.desc}
               </p>
             </div>
             <div className="hotelDetailsPrice">
@@ -105,7 +116,7 @@ const Hotel = () => {
                 an excellent location score of 9.8!
               </p>
               <h2>
-                <b>$945</b> (9 nights)
+                <b>${days*data.cheapestPrice}</b> ({days} nights)
               </h2>
               <button>Reserve or Book Now!</button>
             </div>

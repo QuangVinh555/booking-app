@@ -7,8 +7,15 @@ import {format} from 'date-fns';
 import './Header.css';
 import 'react-date-range/dist/styles.css'; // main css file
 import 'react-date-range/dist/theme/default.css'; // theme css file
+import { useContext } from 'react';
+import { SearchContext } from '../../context/SearchContext';
+import { AuthContext } from '../../context/AuthContext';
+
 
 const Header = ({type}) => {
+
+    // destinationSearch onChange
+    const [destination, setDestination] = useState("")
 
     // Date
     const [openDate, setOpenDate] = useState(false);
@@ -40,14 +47,18 @@ const Header = ({type}) => {
         })
     }
 
-    // destinationSearch onChange
-    const [destination, setDestination] = useState("")
     const navigate = useNavigate();
-
+    const {searchDates} = useContext(SearchContext);
     const handleSearch = () => {
+        const search = {
+            destination,
+            date,
+            options
+        }
+        searchDates(search);
         navigate('hotels', {state: {destination, date, options}})
     }
-
+    const {user} = useContext(AuthContext);
   return (
     <div className="header">
        <div className={type === "list" ? "headerContainer listMode" : "headerContainer"}>
@@ -77,10 +88,9 @@ const Header = ({type}) => {
             <>
                 <h1 className="headerTitle">A lifetime of discounts? It's Genius.</h1>
                 <p className="headerDesc">Get rewarded for your travels – unlock instant savings of 
-                    10% or more with a free Lamabooking account
+                    10% or more with a free bagobooking account
                 </p>
-                <button className="headerBtn">Sign in / Register</button>
-
+                {!user && <button className="headerBtn">Sign in / Register</button>}
                 <div className="headerSearch">
                     <div className="headerSearchItem">
                         <FontAwesomeIcon icon={faBed} />
