@@ -6,9 +6,11 @@ import Footer from '../../components/footer/Footer';
 import './Hotel.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleArrowLeft, faCircleArrowRight, faCircleXmark, faLocationDot } from '@fortawesome/free-solid-svg-icons';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import useFetch from '../../components/hooks/useFetch/useFetch';
 import { SearchContext } from '../../context/SearchContext';
+import Reserve from '../../components/reserve/Reserve';
+import { AuthContext } from '../../context/AuthContext';
 
 const Hotel = () => {
   const PK = process.env.REACT_APP_PUBLIC_API;
@@ -38,8 +40,20 @@ const Hotel = () => {
   // open big Img
   const [open, setOpen] = useState(false);
 
+  // reserve modal
+  const [openModal, setOpenModal] = useState(false);
+
+  const {user} = useContext(AuthContext);
+  const navigate = useNavigate();
+  const handleOpenModal = () => {
+    if(user){
+      setOpenModal(true);
+    }else{
+      navigate('/login');
+    }
+  }
+
   const handelOpen = (index) => {
-    console.log(index)
     setSlideNumber(index);
     setOpen(true);
   }
@@ -118,13 +132,16 @@ const Hotel = () => {
               <h2>
                 <b>${days*data.cheapestPrice}</b> ({days} nights)
               </h2>
-              <button>Reserve or Book Now!</button>
+              <button onClick={handleOpenModal}>Reserve or Book Now!</button>
             </div>
           </div>
         </div>
       <MailList />
       </div>
       <Footer />
+      {
+        openModal && <Reserve setOpen={setOpenModal} hotelId = {id} />
+      }
     </div>
   )
 }

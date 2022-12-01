@@ -58,7 +58,7 @@ const AuthContextProvider = ({children}) => {
         try {
             const res = await axios.post(`${PK}/auth/login`, user);
             console.log(res.data.details)
-            if(res.data){
+            if(res.data.isAdmin){
                 dispatch({
                     type: "LOGIN_SUCCESS",
                     payload: res.data.details

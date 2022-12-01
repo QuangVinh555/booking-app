@@ -1,4 +1,5 @@
 const Hotel = require('../models/Hotel');
+const Room = require('../models/Room');
 const HotelsControllersProvider = {
     // [POST] /api/hotels
     create: async (req, res) => {
@@ -83,6 +84,21 @@ const HotelsControllersProvider = {
                 {type: 'villa', count: villaCount},
                 {type: 'cabin', count: cabinCount}
             ])
+        } catch (error) {
+            return res.status(500).json(error);
+        }
+    },
+
+    // [GET] /api/hotels/room/:id
+    getHotelRoom: async (req, res) => {
+        try {
+            const hotel = await Hotel.findById(req.params.id);
+            const list = await Promise.all(
+                hotel.rooms.map(room => (
+                    Room.findById(room)
+                ))
+            );
+            return res.status(200).json(list);
         } catch (error) {
             return res.status(500).json(error);
         }

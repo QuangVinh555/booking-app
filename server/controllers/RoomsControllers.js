@@ -59,6 +59,19 @@ const RoomControllersProvider = {
         } catch (error) {
             return res.status(500).json(error);
         }
+    },
+
+    // [PUT] /api/rooms/availability/:id
+    updateRoomAvailability: async (req, res) => {
+        try {
+            await Room.updateOne(
+                {"roomNumbers._id": req.params.id},
+                {$push: {"roomNumbers.$.unavailableDates": req.body.dates}}
+            )
+            return res.status(200).json("Room status has been updated.");
+        } catch (error) {
+            return res.status(500).json(error);
+        }
     }
 }
 

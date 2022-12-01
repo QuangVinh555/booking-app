@@ -12,8 +12,7 @@ const AuthControllersProvider = {
             const salt = bcrypt.genSaltSync(10); 
             const hashPassword = bcrypt.hashSync(req.body.password, salt);
             const newUser = new User({
-                username: req.body.username,
-                email: req.body.email,
+                ...req.body,
                 password: hashPassword
             });
             await newUser.save();
@@ -38,9 +37,10 @@ const AuthControllersProvider = {
 
             const token = jwt.sign({id: user._id, isAdmin: user.isAdmin}, process.env.JWT);
                             // ten cookie   , gia tri  
-            return res.cookie("access_token", token, { 
-                httpOnly: true,
-            }).status(200).json({...other});
+            // return res.cookie("access_token", token, { 
+            //     httpOnly: true,
+            // }).status(200).json({details:{...other}, isAdmin});
+            return res.status(200).json({details:{...other}, isAdmin, token});
         } catch (error) {
             next(error);
         }
